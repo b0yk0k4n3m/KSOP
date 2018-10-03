@@ -87,12 +87,13 @@
                                             groupItems.Add().SummaryType(SummaryType.Count);
                                         })
                                     )
+                                    .ColumnHidingEnabled(true)
                                     .Editing(e => e
                                         .Mode(GridEditMode.Popup)
                                         .AllowUpdating(true)
                                         .AllowAdding(true)
                                         .AllowDeleting(true)
-
+                                        
                                         .Popup(p => p
                                             .Title("Employee Info")
                                             .ShowTitle(true)
