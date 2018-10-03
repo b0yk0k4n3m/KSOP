@@ -1,0 +1,148 @@
+﻿@using KSOPWEB.Models
+
+<div class="content-header row">
+    <div class="content-header-left col-md-6 col-12 mb-2">
+        <h3 class="content-header-title">Project Task Lists</h3>
+        <div class="row breadcrumbs-top">
+            <div class="breadcrumb-wrapper col-12">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="index.html">Home</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="#">Project</a>
+                    </li>
+                    <li class="breadcrumb-item active">
+                        Quản lý công việc
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+    <div class="content-header-right col-md-6 col-12">
+        <div class="btn-group float-md-right" role="group" aria-label="Button group with nested dropdown">
+            <button class="btn btn-info round dropdown-toggle dropdown-menu-right box-shadow-2 px-2"
+                    id="btnGroupDrop1" type="button" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false">
+                <i class="ft-settings icon-left"></i> Settings
+            </button>
+            <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                <a class="dropdown-item" href="card-bootstrap.html">Cards</a><a class="dropdown-item"
+                                                                                href="component-buttons-extended.html">Buttons</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="content-body">
+    <section class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Quản lý công việc</h4>
+                    <a class="heading-elements-toggle"><i class="la la-ellipsis-h font-medium-3"></i></a>
+                    <div class="heading-elements">
+                        <button class="btn btn-primary btn-sm" onclick="CreateTask"><i class="ft-plus white"></i> Tạo mới</button>
+                        <span class="dropdown">
+                            <button id="btnSearchDrop1" type="button" data-toggle="dropdown" aria-haspopup="true"
+                                    aria-expanded="false" class="btn btn-warning btn-sm dropdown-toggle dropdown-menu-right">
+                                <i class="ft-download white"></i>
+                            </button>
+                            <span aria-labelledby="btnSearchDrop1" class="dropdown-menu mt-1 dropdown-menu-right">
+                                <a href="#" class="dropdown-item"><i class="la la-calendar"></i> Due Date</a>
+                                <a href="#" class="dropdown-item"><i class="la la-random"></i> Priority </a>
+                                <a href="#" class="dropdown-item"><i class="la la-bar-chart"></i> Progress</a>
+                                <a href="#" class="dropdown-item"><i class="la la-user"></i> Assign to</a>
+                            </span>
+                        </span>
+                        <button class="btn btn-success btn-sm"><i class="ft-settings white"></i></button>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <div class="card-body">
+                        @(Html.DevExtreme().DataGrid<Order>()
+                                    .ID("TBTask")
+                                    .ShowBorders(true)
+                                    .DataSource(d => d.Mvc().Controller("Orders").LoadAction("Get").Key("OrderID"))
+                                    .Columns(columns =>
+                                    {
+                                        columns.AddFor(m => m.OrderID);
+                                        columns.AddFor(m => m.OrderDate);
+                                        columns.AddFor(m => m.CustomerName);
+                                        columns.AddFor(m => m.ShipCountry);
+                                        columns.AddFor(m => m.ShipCity);
+                                    })
+                                    .Paging(p => p.PageSize(10))
+                                    .FilterRow(f => f.Visible(true))
+                                    .HeaderFilter(f => f.Visible(true))
+                                    .GroupPanel(p => p.Visible(true))
+                                    .Grouping(g => g.AutoExpandAll(false))
+                                    .RemoteOperations(true)
+                                    .Summary(s => s
+                                    .TotalItems(totalItems =>
+                                    {
+                                        totalItems.AddFor(m => m.ShipCity).SummaryType(SummaryType.Count);
+                                    })
+                                        .GroupItems(groupItems =>
+                                        {
+                                            groupItems.Add().SummaryType(SummaryType.Count);
+                                        })
+                                    )
+                                    .Editing(e => e
+                                        .Mode(GridEditMode.Popup)
+                                        .AllowUpdating(true)
+                                        .AllowAdding(true)
+                                        .AllowDeleting(true)
+
+                                        .Popup(p => p
+                                            .Title("Employee Info")
+                                            .ShowTitle(true)
+                                            .Width(700)
+                                            .Height(345)
+                                            .Position(pos => pos
+                                            .My(HorizontalAlignment.Center, VerticalAlignment.Top)
+                                            .At(HorizontalAlignment.Center, VerticalAlignment.Top)
+                                            .Of(new JS("window"))
+                                            ))
+                                        .Form(form =>
+                                        {
+                                            form
+                                                .Items(item =>
+                                                {
+                                                    item.AddGroup()
+                                                        .CssClass("first-group")
+                                                        .ColCount(1)
+                                                        .Items(groupItem =>
+                                                        {
+                                                            groupItem.AddGroup().Items(secondGroupitem =>
+                                                            {
+
+                                                                secondGroupitem.AddSimpleFor(m => m.CustomerName)
+                                                                    .CssClass("form-control")
+                                                                    .IsRequired(true);
+                                                            });
+                                                        }
+                                                        );
+                                                    item.AddGroup()
+                                                        .CssClass("first-group")
+                                                        .ColCount(1)
+                                                        .Items(groupItem =>
+                                                        {
+                                                            groupItem.AddGroup().Items(secondGroupitem =>
+                                                            {
+                                                                secondGroupitem.AddSimpleFor(m => m.ShipCity);
+                                                            });
+                                                        }
+                                                        );
+                                                }
+                                                );
+                                        })
+
+                                      )
+                        )
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
