@@ -88,12 +88,13 @@
                                         })
                                     )
                                     .ColumnHidingEnabled(true)
+                                    .Selection(selection => selection.Mode(SelectionMode.Multiple))
                                     .Editing(e => e
                                         .Mode(GridEditMode.Popup)
                                         .AllowUpdating(true)
                                         .AllowAdding(true)
                                         .AllowDeleting(true)
-                                        
+                                        .UseIcons(true)
                                         .Popup(p => p
                                             .Title("Employee Info")
                                             .ShowTitle(true)
